@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello Bulma!</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <a href="{% url 'core:home' %}" class="button is-primary is-light">Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="navbar-menu">
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="buttons">
+                  {% if request.user.is_authenticated %}
+                      <a href="{% url 'core:logout' %}" class="button is-danger">
+                        Log out
+                    </a>
+                      {% else %}
+
+                    <a href="{% url 'core:signup' %}" class="button is-primary">
+                        <strong>Sign up</strong>
+                    </a>
+                    <a href="{% url 'core:login' %}" class="button is-light">
+                        Log in
+                    </a>
+                  {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<section class="section">
+
+    {% for message in messages %}
+        <div class="columns is-centered">
+            <div class="column is-four-fifths">
+                <div class="col-3 notification is-{% if message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% elif message.tags == 'error' %}danger{% endif %}">
+                    <button class="delete"></button>
+                    {{ message }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+
+    {% block content %}{% endblock %}
+
+</section>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p><strong>Amirali Arandan</strong>, code with stein</p>
+    </div>
+</footer>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+            const $notification = $delete.parentNode;
+
+            $delete.addEventListener('click', () => {
+                $notification.parentNode.removeChild($notification);
+            });
+        });
+    });
+</script>
+</html>
