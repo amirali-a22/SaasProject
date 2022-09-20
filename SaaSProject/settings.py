@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # APPS
-    'core.apps.CoreConfig'
+    'core.apps.CoreConfig',
+    'dashboard.apps.DashboardConfig',
+    'bookmark.apps.BookmarkConfig',
 ]
 
 MIDDLEWARE = [
@@ -113,12 +115,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-LOGIN_URL = 'login'
+LOGIN_URL = 'core:login'
 LOGOUT_REDIRECT_URL = 'core:home'
 LOGIN_REDIRECT_URL = 'core:home'
 
 STATIC_URL = 'static/'
-
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 

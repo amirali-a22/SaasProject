@@ -131,3 +131,4 @@ dmypy.json
 .pyre/
 node_modules
 package.json.org
+.sass-cache/

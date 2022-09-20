@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="title">Categories</h1>
+        <h2 class="subtitle"><a href="{% url 'bookmark:category_creat' %}">Add category</a></h2>
+        <div class="columns">
+            {% for category in category_list %}
+                <div class="column is-3">
+                    <div class="card card-link">
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-content">
+                                    <p class="title is-4">{{ category.title }}</p>
+                                </div>
+                            </div>
+                            <div class="content">
+                                {{ category.description }}
+                            </div>
+                            <footer class="card-footer">
+                                <a href="{{ category.get_absolute_url }}" class="card-footer-item">Visit</a>
+                                <a href="" class="card-footer-item">Edit</a>
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}
