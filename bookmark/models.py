@@ -28,3 +28,37 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Bookmark(models.Model):
+    category = models.ForeignKey(
+        to=Category,
+        on_delete=models.CASCADE,
+        related_name='bookmarks'
+    )
+    title = models.CharField(
+        max_length=255,
+    )
+    description = models.TextField(
+        blank=True,
+        null=True,
+    )
+    url = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+    )
+    created_by = models.ForeignKey(
+        to=User,
+        related_name='bookmarks',
+        on_delete=models.CASCADE,
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    def get_absolute_url(self):
+        return reverse('bookmark:bookmark_detail', kwargs={'pk': self.id})
+
+    def __str__(self):
+        return self.title

@@ -2,25 +2,24 @@
 
 {% block content %}
     <div class="container">
-        <h1 class="title">Categories</h1>
-        <h2 class="subtitle"><a href="{% url 'bookmark:category_creat' %}">Add category</a></h2>
+        <h1 class="title">Bookmarks</h1>
+{#        <h2 class="subtitle"><a href="{% url 'bookmark:bookmark_creat' %}">Add bookmark</a></h2>#}
         <div class="columns">
-            {% for category in category_list %}
+            {% for bookmark in bookmark_list %}
                 <div class="column is-3">
                     <div class="card card-link">
                         <div class="card-content">
                             <div class="media">
                                 <div class="media-content">
-                                    <p class="title is-4">{{ category.title }}</p>
+                                    <p class="title is-4">{{ bookmark.title }}</p>
                                 </div>
                             </div>
                             <div class="content">
-                                {{ category.description }}
+                                {{ bookmark.description }}
                             </div>
                             <footer class="card-footer">
-                                <a href="{{ category.get_absolute_url }}" class="card-footer-item">Visit</a>
-                                <a href="{% url 'bookmark:category_edit' category.pk %}"
-                                   class="card-footer-item">Edit</a>
+                                <a href="{{ bookmark.get_absolute_url }}" class="card-footer-item">Visit</a>
+                                <a href="" class="card-footer-item">Edit</a>
                             </footer>
                         </div>
                     </div>

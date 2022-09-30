@@ -1,0 +1,16 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="title">{% if object %}Edit - {{ object.title }}{% else %}Create{% endif %} Bookmark</h1>
+
+        <form action="" method="post">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <button class="button is-primary" type="submit">{% if object %}Edit{% else %}Create{% endif %}</button>
+
+        </form>
+
+
+    </div>
+{% endblock %}

@@ -1,12 +1,131 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-    <div class="container">
+    <div class="container" id="vue-app">
         <h1 class="title">{{ object.title }}</h1>
 
-        {{ object.description }}
+        description : {{ object.description }}
+        <hr>
+        <a class="button btn-success" href="{% url 'bookmark:bookmark_creat' category.id %}">Add Bookmark</a>
+        <a @click="toggleDialog({{ category.id }})" class="button btn-success">Delete Category</a>
+        <hr>
+        <div class="columns">
 
-        <p>list links here...</p>
+            <div class="column is-3" v-for="bookmark in bookmarks" :key="bookmark.id">
+                <div class="card card-link">
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-4">[[ bookmark.title ]]</p>
+                            </div>
+                        </div>
+                        <div class="content">
+                            [[ bookmark.description ]]
+                        </div>
+                        <footer class="card-footer">
+                            <a v-if="bookmark.url ==! 'null'" :href="bookmark.url" class="card-footer-item">Visit</a>
+                            <a v-else href="#" class="card-footer-item">Visit</a>
+                            <a :href="bookmark.edit_url" class="card-footer-item">Edit</a>
+                            <a @click="toggleBookmarkDialog(bookmark.id)" class="card-footer-item">Delete</a>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="modal" :class="{ 'is-active' : showDialog }">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Are you sure?</p>
+                    <button class="delete" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    if you delete this category, all bookmarks belonging to it will be deleted as well!
+                </section>
+                <footer class="modal-card-foot">
+                    <button @click="deleteCategory()" class="button is-success">Yes, delete it</button>
+                    <button class="button" @click="showDialog =! showDialog">Cancel</button>
+                </footer>
+            </div>
+        </div>
+
+
+        <div class="modal" :class="{ 'is-active' : showBookmarkDialog }">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Are you sure?</p>
+                    <button class="delete" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    Are you sure you want to delete the bookmark?
+                </section>
+                <footer class="modal-card-foot">
+                    <button @click="deleteBookmark()" class="button is-success">Yes, delete it</button>
+                    <button class="button" @click="showBookmarkDialog =! showBookmarkDialog">Cancel</button>
+                </footer>
+            </div>
+        </div>
+
 
     </div>
+
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+
+        new Vue({
+            delimiters: ["[[", "]]"],
+            el: '#vue-app',
+            data() {
+                return {
+                    showDialog: false,
+                    showBookmarkDialog: false,
+                    category_id: 0,
+                    bookmark_id: 0,
+                    bookmarks:  {{ bookmarks |safe }}
+                }
+            },
+            methods: {
+                toggleDialog(id) {
+                    this.category_id = id
+                    this.showDialog = true
+                },
+                toggleBookmarkDialog(id) {
+                    this.bookmark_id = id
+                    this.showBookmarkDialog = true
+                },
+                deleteCategory() {
+                    axios.delete(`/api/category/${this.category_id}/`)
+                        .then((response) => {
+                            console.log(response);
+                            window.location =
+                            {% url 'bookmark:categories' %}
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                },
+                deleteBookmark() {
+                    axios.delete(`/api/bookmark/${this.bookmark_id}/`)
+                        .then((response) => {
+                            this.showBookmarkDialog = false;
+                            this.bookmarks = (this.bookmarks || []).filter(bookmark => bookmark.id !== this.bookmark_id)
+                            console.log(response);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+
+                        });
+                },
+
+            }
+        })
+
+    </script>
 {% endblock %}
