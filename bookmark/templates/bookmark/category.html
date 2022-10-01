@@ -3,11 +3,13 @@
 {% block content %}
     <div class="container" id="vue-app">
         <h1 class="title">{{ object.title }}</h1>
-
+        <h2 class="subtitle">{{ category.bookmarks.all|length }}
+            bookmark{{ category.bookmarks.all|length|pluralize:"s" }}</h2>
         description : {{ object.description }}
         <hr>
-        <a class="button btn-success" href="{% url 'bookmark:bookmark_creat' category.id %}">Add Bookmark</a>
-        <a @click="toggleDialog({{ category.id }})" class="button btn-success">Delete Category</a>
+        <a class="button is-primary" href="{% url 'bookmark:bookmark_creat' category.id %}">Add Bookmark</a>
+        <a class="button is-warning" href="{% url 'bookmark:category_edit' category.id %}">Edit Category</a>
+        <a @click="toggleDialog({{ category.id }})" class="button is-danger">Delete Category</a>
         <hr>
         <div class="columns">
 
@@ -21,10 +23,15 @@
                         </div>
                         <div class="content">
                             [[ bookmark.description ]]
+                            <hr>
+                            <b>Visit : [[ bookmark.visit_count ]]</b>
                         </div>
                         <footer class="card-footer">
-                            <a v-if="bookmark.url ==! 'null'" :href="bookmark.url" class="card-footer-item">Visit</a>
-                            <a v-else href="#" class="card-footer-item">Visit</a>
+                            <a @click="increaseVisit(bookmark.id)" :href="bookmark.url"
+                               class="card-footer-item" :target="bookmark.target">Visit</a>
+                            {#                            <a @click="increaseVisit(bookmark.id)" v-if="bookmark.url ==! 'null'" :href="bookmark.url"#}
+                            {#                               class="card-footer-item">Visit</a>#}
+                            {#                            <a v-else href="#" class="card-footer-item">Visit</a>#}
                             <a :href="bookmark.edit_url" class="card-footer-item">Edit</a>
                             <a @click="toggleBookmarkDialog(bookmark.id)" class="card-footer-item">Delete</a>
                         </footer>
@@ -88,6 +95,7 @@
                     showBookmarkDialog: false,
                     category_id: 0,
                     bookmark_id: 0,
+                    visit_count: 0,
                     bookmarks:  {{ bookmarks |safe }}
                 }
             },
@@ -122,6 +130,24 @@
                             console.log(error);
 
                         });
+                },
+                increaseVisit(bookmark_id) {
+                    if (this.bookmarks.filter(bookmark => bookmark.id === bookmark_id)[0].url !== '#') {
+                        axios.post(`/api/bookmark/${bookmark_id}/increase/`)
+                            .then((response) => {
+                                console.log(response);
+                                for (let i = 0; this.bookmarks.length; i++) {
+                                    console.log(this.bookmarks[i].id)
+                                    if (this.bookmarks[i].id === bookmark_id) {
+                                        this.bookmarks[i].visit_count = parseInt(this.bookmarks[i].visit_count + 1)
+                                    }
+                                }
+                            })
+                            .catch((error) => {
+                                console.log(error);
+
+                            });
+                    }
                 },
 
             }

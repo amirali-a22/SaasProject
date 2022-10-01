@@ -3,8 +3,11 @@
 {% block content %}
     <div class="container">
         <h1 class="title">Dashboard</h1>
-        {% for bookmark in bookmarks %}
-            <div class="columns">
+        <div class="column is-12">
+            <h2 class="subtitle">5 newest bookmark</h2>
+        </div>
+        <div class="columns">
+            {% for bookmark in bookmarks %}
                 <div class="column is-3">
                     <div class="card card-link">
                         <div class="card-content">
@@ -19,15 +22,40 @@
                             </div>
                             <footer class="card-footer">
                                 <a href="{{ bookmark.url }}" class="card-footer-item">Visit</a>
-                                <a href="" class="card-footer-item">Edit</a>
+                                <a href="{% url 'bookmark:bookmark_edit' bookmark.category.pk bookmark.pk  %}"
+                                   class="card-footer-item">Edit</a>
                             </footer>
                         </div>
                     </div>
                 </div>
+            {% endfor %}
+        </div>
+        <div class="column is-12">
+            <h2 class="subtitle">5 newest categories</h2>
+        </div>
+        <div class="columns">
+            {% for category in categories %}
+                <div class="column is-3">
+                    <div class="card card-link">
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-content">
+                                    <p class="title is-4">{{ category.title }}</p>
+                                </div>
 
-            </div>
-
-        {% endfor %}
-
+                            </div>
+                            <div class="content">
+                                {{ category.description }}
+                            </div>
+                            <footer class="card-footer">
+                                <a href="{% url 'bookmark:category_detail' category.pk %}" class="card-footer-item">Visit</a>
+                                <a href="{% url 'bookmark:category_edit' category.pk %}"
+                                   class="card-footer-item">Edit</a>
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

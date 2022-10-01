@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+{% load extra_tags %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="title">{% if object %}Edit - {{ object.title }}{% else %}Create{% endif %} Profile</h1>
+
+        <form action="" method="post">
+            {% for field in form %}
+                <div class="field">
+                    <label for="" class="label">{{ field.label_tag }}</label>
+                    <div class="control">
+                        {% if field|input_type == 'Textarea' %}
+                            {{ field | add_class:'textarea is-warning' }}
+
+                        {% else %}
+                            {{ field | add_class:'input is-warning' }}
+
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            {% csrf_token %}
+            <button class="button is-primary" type="submit">{% if object %}Edit{% else %}Create{% endif %}</button>
+
+        </form>
+
+
+    </div>
+{% endblock %}

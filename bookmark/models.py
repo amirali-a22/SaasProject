@@ -48,6 +48,9 @@ class Bookmark(models.Model):
         blank=True,
         null=True,
     )
+    visit_count = models.IntegerField(
+        default=0,
+    )
     created_by = models.ForeignKey(
         to=User,
         related_name='bookmarks',
@@ -59,6 +62,10 @@ class Bookmark(models.Model):
 
     def get_absolute_url(self):
         return reverse('bookmark:bookmark_detail', kwargs={'pk': self.id})
+
+    def increase_visit_count(self):
+        self.visit_count += 1
+        self.save()
 
     def __str__(self):
         return self.title

@@ -28,10 +28,13 @@ class CategoriesDV(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CategoriesDV, self).get_context_data()
-        bookmarks = self.get_object().bookmarks.values('id', 'category_id', 'title', 'description', 'url')
+        bookmarks = self.get_object().bookmarks.values('id', 'category_id', 'title', 'description', 'url',
+                                                       'visit_count')
         for bookmark in bookmarks:
+            bookmark['target'] = '_blank'
             if bookmark['url'] is None:
-                bookmark['url'] = 'null'
+                bookmark['url'] = '#'
+                bookmark['target'] = '_self'
             bookmark['edit_url'] = reverse('bookmark:bookmark_edit',
                                            kwargs={'pk': bookmark['id'], 'category_id': bookmark['category_id']})
         context['bookmarks'] = str(list(bookmarks))
