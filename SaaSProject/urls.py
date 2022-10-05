@@ -21,5 +21,6 @@ urlpatterns = [
     path('', include('core.urls', namespace='core')),
     path('', include('dashboard.urls', namespace='dashboard')),
     path('', include('bookmark.urls', namespace='bookmark')),
+    path('', include('userprofile.urls', namespace='user_profile')),
 
 ]

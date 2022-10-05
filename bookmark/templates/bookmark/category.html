@@ -136,8 +136,8 @@
                         axios.post(`/api/bookmark/${bookmark_id}/increase/`)
                             .then((response) => {
                                 console.log(response);
-                                for (let i = 0; this.bookmarks.length; i++) {
-                                    console.log(this.bookmarks[i].id)
+                                for (let i = 0; i < this.bookmarks.length; i++) {
+                                    console.log(i)
                                     if (this.bookmarks[i].id === bookmark_id) {
                                         this.bookmarks[i].visit_count = parseInt(this.bookmarks[i].visit_count + 1)
                                     }

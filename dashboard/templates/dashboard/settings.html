@@ -11,7 +11,11 @@
                     <label for="" class="label">{{ field.label_tag }}</label>
                     <div class="control">
                         {% if field|input_type == 'Textarea' %}
-                            {{ field | add_class:'textarea is-warning' }}
+                            {{ field }}
+                        {% elif field|input_type == 'Select' %}
+                            <div class="select">
+                            {{ field}}
+                            </div>
 
                         {% else %}
                             {{ field | add_class:'input is-warning' }}

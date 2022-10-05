@@ -4,6 +4,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages
+from django import forms
+from userprofile.conts import ChoicePlans
 
 
 class DashboardV(LoginRequiredMixin, View):
@@ -28,3 +30,15 @@ class Settings(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         messages.success(request=self.request, message='ur profile updated successfully!')
         return reverse('dashboard:settings', args=[self.request.user.pk])
+
+    def get_context_data(self, **kwargs):
+        context = super(Settings, self).get_context_data(**kwargs)
+        plans = self.request.user.profile.plan if self.request.user.profile.plan else None
+        context['form'].fields.update({'plans': forms.ChoiceField(choices=ChoicePlans.CHOICE_PLANS, initial=plans)})
+        return context
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        user.profile.plan = request._post['plans']
+        user.profile.save()
+        return super(Settings, self).post(request, *args, **kwargs)

@@ -6,9 +6,15 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.contrib import messages
 
+from userprofile.models import UserProfile
+
 
 class Home(TemplateView):
     template_name = 'core/home.html'
+
+
+class Plans(TemplateView):
+    template_name = 'core/plans.html'
 
 
 class LoginV(LoginView):
@@ -38,5 +44,7 @@ class SignUpV(FormView):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
         # form.send_email()
+        user = form.save()
+        UserProfile.objects.create(user=user)
         messages.success(request=self.request, message='u signed up successfully!', )
         return super().form_valid(form)

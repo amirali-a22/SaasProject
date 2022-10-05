@@ -43,17 +43,18 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'dashboard.apps.DashboardConfig',
     'bookmark.apps.BookmarkConfig',
+    'userprofile.apps.UserprofileConfig',
 ]
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
     ),
 }
 MIDDLEWARE = [
