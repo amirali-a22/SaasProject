@@ -11,7 +11,7 @@
         <a class="button is-warning" href="{% url 'bookmark:category_edit' category.id %}">Edit Category</a>
         <a @click="toggleDialog({{ category.id }})" class="button is-danger">Delete Category</a>
         <hr>
-        <div class="columns">
+        <div class="columns is-multiline">
 
             <div class="column is-3" v-for="bookmark in bookmarks" :key="bookmark.id">
                 <div class="card card-link">

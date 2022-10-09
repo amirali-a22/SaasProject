@@ -14,7 +14,7 @@
                             {{ field }}
                         {% elif field|input_type == 'Select' %}
                             <div class="select">
-                            {{ field}}
+                                {{ field }}
                             </div>
 
                         {% else %}
@@ -26,6 +26,7 @@
             {% endfor %}
             {% csrf_token %}
             <button class="button is-primary" type="submit">{% if object %}Edit{% else %}Create{% endif %}</button>
+            <button class="button is-danger" onclick="window.history.back()">Cancel</button>
 
         </form>
 

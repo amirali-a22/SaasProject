@@ -2,27 +2,38 @@
 {% load extra_tags %}
 {% block content %}
     <div class="container">
-        <h1 class="title">{% if object %}Edit - {{ object.title }}{% else %}Create{% endif %} Bookmark</h1>
+        {% if canAdd %}
 
-        <form action="" method="post">
-                        {% for field in form %}
-                <div class="field">
-                    <label for="" class="label">{{ field.label_tag }}</label>
-                    <div class="control">
-                        {% if field|input_type == 'Textarea' %}
-                            {{ field | add_class:'textarea is-warning' }}
+            <h1 class="title">{% if object %}Edit - {{ object.title }}{% else %}Create{% endif %} Bookmark</h1>
 
-                        {% else %}
-                            {{ field | add_class:'input is-warning' }}
+            <form action="" method="post">
+                {% for field in form %}
+                    <div class="field">
+                        <label for="" class="label">{{ field.label_tag }}</label>
+                        <div class="control">
+                            {% if field|input_type == 'Textarea' %}
+                                {{ field | add_class:'textarea is-warning' }}
 
-                        {% endif %}
+                            {% else %}
+                                {{ field | add_class:'input is-warning' }}
+
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
-            {% csrf_token %}
-            <button class="button is-primary" type="submit">{% if object %}Edit{% else %}Create{% endif %}</button>
+                {% endfor %}
+                {% csrf_token %}
+                <button class="button is-primary" type="submit">{% if object %}Edit{% else %}Create{% endif %}</button>
+                <button class="button is-danger" onclick="window.history.back()">Cancel</button>
 
-        </form>
+            </form>
+
+        {% else %}
+            <article class="message is-danger">
+                <div class="message-body">
+                    {{ canAddMessage }}
+                </div>
+            </article>
+        {% endif %}
 
 
     </div>

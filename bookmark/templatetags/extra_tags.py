@@ -34,3 +34,18 @@ def add_classes(value, arg):
             css_classes.append(a)
     # join back to single string
     return value.as_widget(attrs={'class': ' '.join(css_classes)})
+
+
+@register.filter(name='add_attrs')
+def add_attr(field, css):
+    attrs = {}
+    definition = css.split(',')
+
+    for d in definition:
+        if ':' not in d:
+            attrs['class'] = d
+        else:
+            key, val = d.split(':')
+            attrs[key] = val
+
+    return field.as_widget(attrs=attrs)

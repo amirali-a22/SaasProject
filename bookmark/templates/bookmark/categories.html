@@ -2,9 +2,9 @@
 
 {% block content %}
     <div class="container">
-        <h1 class="title">Categories</h1>
-        <h2 class="subtitle"><a href="{% url 'bookmark:category_creat' %}">Add category</a></h2>
-        <div class="columns">
+        <h1 class="title">Categories</h1><br>
+        <h2 class="subtitle"><a href="{% url 'bookmark:category_creat' %}" class="button is-primary">Add category</a></h2>
+        <div class="columns is-multiline">
             {% for category in category_list %}
                 <div class="column is-3">
                     <div class="card card-link">

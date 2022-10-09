@@ -12,6 +12,11 @@ class CategoriesUV(LoginRequiredMixin, UpdateView):
     model = Category
     fields = ['title', 'description']
 
+    def get_context_data(self, **kwargs):
+        context = super(CategoriesUV, self).get_context_data()
+        context['canAdd'] = True
+        return context
+
     def get_success_url(self):
         messages.success(request=self.request, message='updated successfully!', )
         return reverse_lazy('bookmark:categories')
@@ -57,6 +62,18 @@ class CategoriesCV(LoginRequiredMixin, CreateView):
     fields = ['title', 'description']
     success_url = reverse_lazy('bookmark:categories')
 
+    def get_context_data(self, **kwargs):
+        context = super(CategoriesCV, self).get_context_data()
+        context['canAdd'] = True
+        catcount = self.request.user.categories.count()
+        if self.request.user.profile.plan == 'basic' and (catcount >= 5):
+            context['canAdd'] = False
+            context['canAddMessage'] = 'you cant have more than 5 categories when you are in basic plan.'
+        elif self.request.user.profile.plan == 'pro' and (catcount >= 50):
+            context['canAdd'] = False
+            context['canAddMessage'] = 'you cant have more than 50 categories when you are in pro plan.'
+        return context
+
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.created_by = self.request.user
@@ -81,9 +98,14 @@ class BookmarksUV(LoginRequiredMixin, UpdateView):
     # success_url = reverse_lazy('bookmark:bookmarks')
     fields = ['title', 'description', 'url']
 
+    def get_context_data(self, **kwargs):
+        context = super(BookmarksUV, self).get_context_data()
+        context['canAdd'] = True
+        return context
+
     def get_success_url(self):
         messages.success(request=self.request, message='updated successfully!', )
-        return reverse_lazy('bookmark:bookmarks')
+        return reverse_lazy('bookmark:category_detail', args=[self.kwargs.get('category_id')])
 
 
 class BookmarksDelete(LoginRequiredMixin, DeleteView):
@@ -99,6 +121,15 @@ class BookmarksCV(LoginRequiredMixin, CreateView):
     template_name = 'bookmark/bookmark_creat.html'
     model = Bookmark
     fields = ['title', 'description', 'url']
+
+    def get_context_data(self, **kwargs):
+        context = super(BookmarksCV, self).get_context_data()
+        context['canAdd'] = True
+        book_count = self.request.user.bookmarks.count()
+        if self.request.user.profile.plan == 'basic' and (book_count >= 50):
+            context['canAdd'] = False
+            context['canAddMessage'] = 'you cant have more than 50 bookmarks when you are in basic plan.'
+        return context
 
     def form_valid(self, form):
         obj = form.save(commit=False)
